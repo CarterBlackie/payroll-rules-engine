@@ -31,17 +31,9 @@ def split_daily_overtime(hours_worked: float, regular_limit: float = 8.0) -> Dai
     """
     Splits hours into regular and overtime based on a daily threshold.
 
-    Why this exists:
-    - Daily overtime is a common payroll rule
-    - The engine can apply this rule per TimeEntry
-
     Rules:
     - If hours_worked <= regular_limit: all regular
     - If hours_worked > regular_limit: remainder is overtime
-
-    Raises:
-    - ValueError if hours_worked is negative
-    - ValueError if regular_limit is <= 0
     """
     if regular_limit <= 0:
         raise ValueError("regular_limit must be greater than 0")
@@ -57,3 +49,21 @@ def split_daily_overtime(hours_worked: float, regular_limit: float = 8.0) -> Dai
         regular_hours=regular_hours,
         overtime_hours=overtime_hours,
     )
+
+
+def split_weekly_overtime(total_hours: float, weekly_limit: float = 44.0) -> tuple[float, float]:
+    """
+    Splits total weekly hours into weekly regular and weekly overtime.
+
+    Returns:
+    - (weekly_regular_hours, weekly_overtime_hours)
+    """
+    if weekly_limit <= 0:
+        raise ValueError("weekly_limit must be greater than 0")
+    if total_hours < 0:
+        raise ValueError("total_hours must be 0 or greater")
+
+    weekly_regular = min(total_hours, weekly_limit)
+    weekly_overtime = max(0.0, total_hours - weekly_limit)
+
+    return weekly_regular, weekly_overtime
