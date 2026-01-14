@@ -1,0 +1,6 @@
+{
+  "employee": { "employee_id": "E001", "hourly_rate": 20.0 },
+  "entries": [
+    { "work_date": "2026-01-10", "hours": -3.0 }
+  ]
+}

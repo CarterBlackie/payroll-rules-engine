@@ -13,9 +13,15 @@ from src.payroll.io import load_timesheet_from_json
 def main() -> int:
     # Default demo file if none is provided
     path = sys.argv[1] if len(sys.argv) > 1 else "data/sample_timesheets.json"
-
-    timesheet = load_timesheet_from_json(path)
-    result = run_payroll(timesheet)
+    try:
+        timesheet = load_timesheet_from_json(path)
+        result = run_payroll(timesheet)
+    except (FileNotFoundError, KeyError, ValueError) as exc:
+        print("Payroll run failed")
+        print("-----------------")
+        print(f"Input file: {path}")
+        print(f"Error: {exc}")
+        return 1
 
     print("Payroll Result")
     print("-------------")
@@ -26,7 +32,6 @@ def main() -> int:
     print(f"Gross pay:    ${result.gross_pay:.2f}")
 
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())
